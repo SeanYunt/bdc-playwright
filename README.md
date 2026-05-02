@@ -2,6 +2,10 @@
 
 Playwright end-to-end test suite for [blackdiamondconsulting.ai](https://blackdiamondconsulting.ai) — a public portfolio demo of browser automation and accessibility testing.
 
+## Latest run
+
+![Playwright report — 17 passed, 0 failed](assets/playwright-report.png)
+
 ## What's tested
 
 | Suite | Tests | What it covers |
