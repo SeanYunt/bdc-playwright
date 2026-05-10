@@ -136,6 +136,7 @@ hr { border:none; border-top:1px solid #eee; margin:0.2in 0; }
 .cover-meta-table td:first-child { font-weight:600; color:rgba(255,255,255,0.3); white-space:nowrap; }
 
 @media print { .page { page-break-after:always; } }
+.page:last-child { page-break-after: auto !important; }
 `;
 
 function coverPage(fm) {
