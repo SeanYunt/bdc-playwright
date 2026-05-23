@@ -10,8 +10,8 @@ test.describe('Accessibility — WCAG 2.1 AA', () => {
     expect(results.violations).toEqual([]);
   });
 
-  test('/risk-scan/ has no violations', async ({ page }) => {
-    await page.goto('/risk-scan/');
+  test('/risk-assessment/ has no violations', async ({ page }) => {
+    await page.goto('/risk-assessment/');
     const results = await new AxeBuilder({ page })
       .withTags(['wcag2a', 'wcag2aa', 'wcag21aa'])
       .analyze();

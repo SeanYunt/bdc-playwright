@@ -36,10 +36,10 @@ const css = `
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; font-size:11pt; color:#1a1a1a; background:#fff; }
 
-.page { width:8.5in; min-height:11in; position:relative; overflow:hidden; page-break-after:always; }
+.page { width:8.5in; height:11in; position:relative; overflow:hidden; page-break-after:always; }
 
 /* Cover */
-.cover { background:#111827; color:#fff; display:flex; flex-direction:column; justify-content:space-between; padding:1in 0.9in 0.8in; min-height:11in; }
+.cover { background:#111827; color:#fff; display:flex; flex-direction:column; justify-content:space-between; padding:1in 0.9in 0.8in; }
 .cover-label { font-size:9pt; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:#D85A30; margin-bottom:0.55in; }
 .cover-firm { font-size:10pt; font-weight:500; color:rgba(255,255,255,0.5); margin-bottom:0.15in; }
 .cover h1 { font-size:30pt; font-weight:700; line-height:1.18; color:#fff; max-width:5.5in; margin-bottom:0.3in; }
@@ -50,7 +50,7 @@ body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-seri
 .cover-meta-right { font-size:8pt; color:rgba(255,255,255,0.3); text-align:right; line-height:1.6; }
 
 /* Inner pages */
-.inner { padding:0.65in 0.9in 0.55in; min-height:11in; display:flex; flex-direction:column; }
+.inner { padding:0.65in 0.9in 0.55in; height:11in; display:flex; flex-direction:column; }
 .page-header { display:flex; justify-content:space-between; align-items:center; border-bottom:1.5px solid #eee; padding-bottom:0.15in; margin-bottom:0.35in; }
 .page-header-firm { font-size:8pt; font-weight:600; color:#D85A30; text-transform:uppercase; letter-spacing:0.1em; }
 .page-header-title { font-size:8pt; color:#888; }
