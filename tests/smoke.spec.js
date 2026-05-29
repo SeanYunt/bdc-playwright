@@ -14,7 +14,8 @@ test.describe('Smoke — page loads', () => {
   test('nav links are present', async ({ page }) => {
     await page.goto('/');
     const nav = page.locator('.site-nav');
-    await expect(nav.getByRole('link', { name: 'Services', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'AI Security', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'AI Assistant', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Resources', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'About', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Free risk assessment', exact: true })).toBeVisible();
@@ -61,6 +62,27 @@ test.describe('Smoke — page loads', () => {
     await page.goto('/resources/');
     await expect(page).toHaveTitle(/Resources/i);
     await expect(page.locator('h1')).toBeVisible();
+  });
+
+  test('/ai-assistant/ page loads', async ({ page }) => {
+    await page.goto('/ai-assistant/');
+    await expect(page).toHaveTitle(/AI Chat Assistant/i);
+    await expect(page.locator('h1')).toBeVisible();
+  });
+
+  test('homepage has ai-assistant-teaser section', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#ai-assistant-teaser')).toBeAttached();
+  });
+
+  test('/ai-assistant/ has get-started section', async ({ page }) => {
+    await page.goto('/ai-assistant/');
+    await expect(page.locator('#get-started')).toBeAttached();
+  });
+
+  test('/ai-assistant/ has contact form', async ({ page }) => {
+    await page.goto('/ai-assistant/');
+    await expect(page.locator('#ai-assist-form')).toBeAttached();
   });
 
   test('footer copyright is visible', async ({ page }) => {

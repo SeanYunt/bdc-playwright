@@ -101,3 +101,66 @@ test.describe('Forms — homepage risk check', () => {
     await expect(cta).toHaveAttribute('href', '/risk-assessment/');
   });
 });
+
+test.describe('Forms — AI assistant (/ai-assistant/)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/ai-assistant/');
+  });
+
+  test('required fields and submit button are present', async ({ page }) => {
+    await expect(page.locator('#ai-name')).toBeVisible();
+    await expect(page.locator('#ai-business')).toBeVisible();
+    await expect(page.locator('#ai-phone')).toBeVisible();
+    await expect(page.locator('#ai-trade')).toBeVisible();
+    await expect(page.locator('#ai-assist-submit')).toBeVisible();
+  });
+
+  test('optional website field is present', async ({ page }) => {
+    await expect(page.locator('#ai-website')).toBeVisible();
+  });
+
+  test('name, business, phone, and trade are required', async ({ page }) => {
+    await expect(page.locator('#ai-name')).toHaveAttribute('required', '');
+    await expect(page.locator('#ai-business')).toHaveAttribute('required', '');
+    await expect(page.locator('#ai-phone')).toHaveAttribute('required', '');
+    await expect(page.locator('#ai-trade')).toHaveAttribute('required', '');
+  });
+
+  test('phone field type is tel', async ({ page }) => {
+    await expect(page.locator('#ai-phone')).toHaveAttribute('type', 'tel');
+  });
+
+  test('website field is not required', async ({ page }) => {
+    const required = await page.locator('#ai-website').getAttribute('required');
+    expect(required).toBeNull();
+  });
+
+  test('success message is hidden on load', async ({ page }) => {
+    await expect(page.locator('#ai-assist-success')).toBeHidden();
+  });
+
+  test('form fields are interactive', async ({ page }) => {
+    await page.fill('#ai-name', 'Jane Smith');
+    await page.fill('#ai-business', 'Smith Plumbing LLC');
+    await page.fill('#ai-phone', '5550000000');
+    await page.fill('#ai-trade', 'plumbing');
+    await expect(page.locator('#ai-name')).toHaveValue('Jane Smith');
+    await expect(page.locator('#ai-business')).toHaveValue('Smith Plumbing LLC');
+    await expect(page.locator('#ai-phone')).toHaveValue('5550000000');
+    await expect(page.locator('#ai-trade')).toHaveValue('plumbing');
+  });
+
+  test('submit sends request to formspree', async ({ page }) => {
+    const [request] = await Promise.all([
+      page.waitForRequest(req => req.url().includes('formspree.io'), { timeout: 10000 }),
+      (async () => {
+        await page.fill('#ai-name', 'Jane Smith');
+        await page.fill('#ai-business', 'Smith Plumbing LLC');
+        await page.fill('#ai-phone', '5550000000');
+        await page.fill('#ai-trade', 'plumbing');
+        await page.click('#ai-assist-submit');
+      })(),
+    ]);
+    expect(request.url()).toContain('formspree.io');
+  });
+});

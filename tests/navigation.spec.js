@@ -7,10 +7,16 @@ test.describe('Navigation — links and buttons', () => {
     await expect(page).toHaveURL('/');
   });
 
-  test('Services nav link updates URL to /#services', async ({ page }) => {
+  test('AI Security nav link navigates to homepage', async ({ page }) => {
+    await page.goto('/risk-assessment/');
+    await page.locator('.site-nav').getByRole('link', { name: 'AI Security', exact: true }).click();
+    await expect(page).toHaveURL('/');
+  });
+
+  test('AI Assistant nav link navigates to /ai-assistant/', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.site-nav').getByRole('link', { name: 'Services', exact: true }).click();
-    await expect(page).toHaveURL(/#services/);
+    await page.locator('.site-nav').getByRole('link', { name: 'AI Assistant', exact: true }).click();
+    await expect(page).toHaveURL('/ai-assistant/');
   });
 
   test('Resources nav link navigates to /resources/', async ({ page }) => {
@@ -106,5 +112,23 @@ test.describe('Navigation — links and buttons', () => {
     const link = page.getByRole('link', { name: /example report/i });
     const href = await link.getAttribute('href');
     expect(href).toMatch(/\.pdf/i);
+  });
+
+  test('homepage ai-assistant-teaser CTA navigates to /ai-assistant/', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('a.btn-primary[href="/ai-assistant/"]').click();
+    await expect(page).toHaveURL('/ai-assistant/');
+  });
+
+  test('/ai-assistant/ hero primary CTA scrolls to get-started section', async ({ page }) => {
+    await page.goto('/ai-assistant/');
+    await page.locator('a.btn-primary', { hasText: 'Book a 15-minute call' }).click();
+    await expect(page).toHaveURL(/#get-started/);
+  });
+
+  test('/ai-assistant/ hero outline CTA scrolls to roi section', async ({ page }) => {
+    await page.goto('/ai-assistant/');
+    await page.locator('a.btn-outline', { hasText: 'See the ROI case' }).click();
+    await expect(page).toHaveURL(/#roi/);
   });
 });
