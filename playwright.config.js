@@ -16,6 +16,15 @@ export default defineConfig({
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
+      testMatch: /tests\/[^/\\]+\.spec\.js$/,
+    },
+    {
+      name: 'demo-chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://demo.blackdiamondconsulting.ai',
+      },
+      testMatch: /tests\/demo\/.+\.spec\.js$/,
     },
   ],
 });
