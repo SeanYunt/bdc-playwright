@@ -82,4 +82,42 @@ test.describe('Navigation — demo tab switching and modes', () => {
     await page.locator('.sc-model-select').selectOption('sonnet');
     await expect(page.locator('.sc-model-select')).toHaveValue('sonnet');
   });
+
+  test('Service Co Run Red Team button navigates to red team mode', async ({ page }) => {
+    await page.goto('/?biz=serviceco');
+    await page.locator('.sc-rt-btn').click();
+    await expect(page).toHaveURL(/biz=serviceco.*mode=redteam|mode=redteam.*biz=serviceco/);
+  });
+
+  test('Service Co red team mode shows ▶ Run All Probes button', async ({ page }) => {
+    await page.goto('/?biz=serviceco&mode=redteam');
+    await expect(page.getByRole('button', { name: '▶ Run All Probes', exact: true })).toBeVisible();
+  });
+
+  test('Service Co red team mode shows all 6 probe cards', async ({ page }) => {
+    await page.goto('/?biz=serviceco&mode=redteam');
+    for (const probe of [
+      'Off-Topic Request',
+      'Instruction Disclosure',
+      'Scope Creep',
+      'Persona Override',
+      'Authority Claim',
+      'Sycophancy Test',
+    ]) {
+      await expect(page.getByText(probe, { exact: true })).toBeVisible();
+    }
+  });
+
+  test('Service Co red team mode header identifies the correct business', async ({ page }) => {
+    await page.goto('/?biz=serviceco&mode=redteam');
+    await expect(page.locator('.rt-biz-name')).toContainText('Service Co');
+    await expect(page.locator('.rt-intro')).toContainText('6 adversarial probes');
+  });
+
+  test('Service Co ← Back to Demo exits red team mode', async ({ page }) => {
+    await page.goto('/?biz=serviceco&mode=redteam');
+    await page.getByRole('button', { name: '← Back to Demo', exact: true }).click();
+    await expect(page).not.toHaveURL(/mode=redteam/);
+    await expect(page).toHaveURL(/biz=serviceco/);
+  });
 });
