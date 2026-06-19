@@ -164,3 +164,38 @@ test.describe('Forms — AI assistant (/ai-assistant/)', () => {
     expect(request.url()).toContain('formspree.io');
   });
 });
+
+test.describe('Forms — newsletter subscribe (resource article page)', () => {
+  test.beforeEach(async ({ page }) => {
+    await page.goto('/resources/hallucination-production-risk/');
+  });
+
+  test('subscribe form is visible on article page', async ({ page }) => {
+    await expect(page.locator('#subscribe-form')).toBeVisible();
+  });
+
+  test('email field is present and required', async ({ page }) => {
+    const emailInput = page.locator('#subscribe-form input[type="email"]');
+    await expect(emailInput).toBeVisible();
+    await expect(emailInput).toHaveAttribute('required', '');
+  });
+
+  test('success message is hidden on load', async ({ page }) => {
+    await expect(page.locator('#subscribe-success')).toBeHidden();
+  });
+
+  test('submit POSTs to /subscribe and shows success message', async ({ page }) => {
+    let capturedBody = null;
+    await page.route('**/subscribe', async (route) => {
+      capturedBody = JSON.parse(route.request().postData() || '{}');
+      await route.fulfill({ status: 200 });
+    });
+
+    await page.fill('#subscribe-form input[type="email"]', 'test@example.com');
+    await page.click('#subscribe-btn');
+
+    await expect(page.locator('#subscribe-success')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('#subscribe-form')).toBeHidden();
+    expect(capturedBody?.email).toBe('test@example.com');
+  });
+});

@@ -89,4 +89,51 @@ test.describe('Smoke — page loads', () => {
     await page.goto('/');
     await expect(page.locator('.footer-copy')).toContainText('Sean Yunt');
   });
+
+  test('homepage has who section', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#who')).toBeAttached();
+  });
+
+  test('homepage has path section', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#path')).toBeAttached();
+  });
+
+  test('homepage has proof section', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#proof')).toBeAttached();
+  });
+
+  test('/thank-you/ page loads with correct heading', async ({ page }) => {
+    await page.goto('/thank-you/');
+    await expect(page).toHaveTitle(/Thank you/i);
+    await expect(page.locator('h1')).toContainText("Thanks. I'll be in touch.");
+    await expect(page.getByRole('link', { name: /back to home/i })).toHaveAttribute('href', '/');
+  });
+
+  test('/subscribe-confirmed/ page loads with correct heading', async ({ page }) => {
+    await page.goto('/subscribe-confirmed/');
+    await expect(page).toHaveTitle(/subscription confirmed/i);
+    await expect(page.locator('h1')).toContainText("You're subscribed.");
+    await expect(page.getByRole('link', { name: /back to home/i })).toHaveAttribute('href', '/');
+  });
+
+  test('/resources/llm-attack-taxonomy/ loads with taxonomy content', async ({ page }) => {
+    await page.goto('/resources/llm-attack-taxonomy/');
+    await expect(page.locator('h1')).toContainText('LLM Attack Taxonomy');
+    await expect(page.locator('.tax-summary')).toBeVisible();
+    await expect(page.locator('.tax-category').first()).toBeVisible();
+    await expect(page.locator('#tax-search')).toBeVisible();
+    await expect(page.locator('.back-link')).toBeVisible();
+  });
+
+  test('resource article page has correct structure', async ({ page }) => {
+    await page.goto('/resources/hallucination-production-risk/');
+    await expect(page.locator('h1')).toBeVisible();
+    await expect(page.locator('.back-link')).toContainText('All articles');
+    await expect(page.locator('.resource-tag')).toBeVisible();
+    await expect(page.locator('.article-meta')).toBeVisible();
+    await expect(page.locator('#subscribe-form')).toBeAttached();
+  });
 });
