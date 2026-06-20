@@ -29,6 +29,10 @@ npx playwright test tests/demo/
 # Run a single test by name
 npx playwright test -g "homepage loads with correct title"
 
+# Run a specific Playwright project
+npx playwright test --project=chromium
+npx playwright test --project=demo-chromium
+
 # Open HTML report after a run
 npx playwright show-report
 
@@ -61,6 +65,19 @@ BASE_URL=http://localhost:1313 npx playwright test
 
 Pages under test (production): `/`, `/risk-assessment/`, `/resources/`, `/ai-assistant/`
 
+### Demo site (`tests/demo/`)
+
+The demo site exposes four AI chatbot personas via `?biz=<slug>`:
+
+| Slug | Business |
+|---|---|
+| `bluepipe` | BluePipe Plumbing |
+| `sparky` | Sparky's Electrical Services |
+| `roofing` | Nailed It Roofing |
+| `serviceco` | Service Co (special layout) |
+
+`bluepipe`, `sparky`, and `roofing` use a floating widget: `#openChat` toggles `.chat-widget` visibility. `serviceco` is different — it uses an always-visible sandbox panel (`.sc-panel`, `.sc-chat`) with system-prompt preset buttons (Loose/Standard/Strict), a model selector (`.sc-model-select`), and a red-team trigger (`.sc-rt-btn`). Tests use `page.goto('/?biz=<slug>')` to set the persona.
+
 ### Locator conventions
 
 - Scope to a container before querying: `page.locator('.site-nav').getByRole('link', ...)`
@@ -68,6 +85,7 @@ Pages under test (production): `/`, `/risk-assessment/`, `/resources/`, `/ai-ass
 - Anchor sections: `#risk-check`, `#get-started`, `#roi`, etc.
 - Form fields: `#name`, `#email`, `#ai_description`, etc.
 - Formspree submissions validated via `page.route()` / `page.waitForRequest()`
+- Newsletter form (`#subscribe-form`) POSTs to the site's own `/subscribe` endpoint — not Formspree. Test stubs it with `page.route('**/subscribe', ...)` and checks for `#subscribe-success` visibility.
 
 ### Analytics tests (`tests/analytics.spec.js`)
 
@@ -94,10 +112,20 @@ await page.evaluate(() => {
 
 ### PDF generation scripts
 
-`make-pdf.js` reads a Markdown file with YAML frontmatter, renders it to styled HTML, and uses Playwright to export a PDF. Supports `<!-- PAGE -->` comments for manual page breaks. Output path comes from the frontmatter `output` field.
+`make-pdf.js` reads a Markdown file with YAML frontmatter, renders it to styled HTML, and uses Playwright to export a PDF. Supports `<!-- PAGE -->` comments for manual page breaks.
+
+Key frontmatter fields:
+- `output` — filename of the generated PDF (required)
+- `output_dir` — directory relative to the markdown file (default: `../blackdiamondconsulting.ai/static`)
+- `title`, `subtitle`, `label`, `date` — cover page text
+- `client`, `product`, `reference` — triggers the assessment-report cover variant
 
 ```bash
 node make-pdf.js <path-to-report.md>
 ```
 
 `gen-pdf.js`, `gen-airline-pdf.js`, and `debug-pdf.js` are one-off/debugging variants.
+
+### Module system
+
+Test files use ES module `import` syntax (handled by Playwright's transform). PDF generation scripts (`make-pdf.js`, etc.) use CommonJS `require()`. Both coexist because `package.json` has `"type": "commonjs"` and Playwright processes test files independently.

@@ -26,5 +26,13 @@ export default defineConfig({
       },
       testMatch: /tests\/demo\/.+\.spec\.js$/,
     },
+    {
+      name: 'fraudhunter-chromium',
+      use: {
+        ...devices['Desktop Chrome'],
+        baseURL: 'https://fraudhunter.blackdiamondconsulting.ai',
+      },
+      testMatch: /tests\/fraudhunter\/.+\.spec\.js$/,
+    },
   ],
 });
