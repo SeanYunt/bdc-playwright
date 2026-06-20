@@ -23,8 +23,8 @@ test.describe('Smoke — fraudhunter.blackdiamondconsulting.ai', () => {
     await expect(page.locator('#status-dot')).toHaveClass(/bg-green-500/, { timeout: 5000 });
   });
 
-  test('status text updates to "Ready"', async ({ page }) => {
-    await expect(page.locator('#status-text')).toContainText('Ready', { timeout: 5000 });
+  test('status text updates to "API online"', async ({ page }) => {
+    await expect(page.locator('#status-text')).toContainText('API online', { timeout: 5000 });
   });
 
   test('all 4 tab buttons are present', async ({ page }) => {

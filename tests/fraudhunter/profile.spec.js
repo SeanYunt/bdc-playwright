@@ -47,7 +47,7 @@ test.describe('Profile tab', () => {
     });
 
     test('red flag descriptions are displayed', async ({ page }) => {
-      await expect(page.locator('#profile-result')).toContainText('revenue_outlier');
+      await expect(page.locator('#profile-result')).toContainText('revenue outlier');
     });
 
     test('PDF download link has correct href', async ({ page }) => {

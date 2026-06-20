@@ -7,7 +7,7 @@ import {
 
 test.describe('Analytics — Scan Run event', () => {
   test('fires "Scan Run" with state "WY" after scan completes', async ({ page }) => {
-    setupSpy(page);
+    await setupSpy(page);
     await stubBase(page);
     await stubScan(page);
     await page.goto('/');
@@ -28,7 +28,7 @@ test.describe('Analytics — Scan Run event', () => {
 
 test.describe('Analytics — Lookup Search event', () => {
   test('fires "Lookup Search" (no props) when lookup is triggered', async ({ page }) => {
-    setupSpy(page);
+    await setupSpy(page);
     await stubBase(page);
     await stubLookup(page);
     await page.goto('/');
@@ -47,7 +47,7 @@ test.describe('Analytics — Lookup Search event', () => {
 
 test.describe('Analytics — Profile Built event', () => {
   test('fires "Profile Built" with score "82%" after fresh profile completes', async ({ page }) => {
-    setupSpy(page);
+    await setupSpy(page);
     await stubBase(page);
     await stubProfile(page, PROFILE_FRESH_FIXTURE);
     await page.goto('/');
@@ -69,7 +69,7 @@ test.describe('Analytics — Profile Built event', () => {
 
 test.describe('Analytics — Profile View event', () => {
   test('fires "Profile View" with cached:"true" for cached result', async ({ page }) => {
-    setupSpy(page);
+    await setupSpy(page);
     await stubBase(page);
     await stubProfile(page, PROFILE_CACHED_FIXTURE);
     await page.goto('/');
@@ -91,7 +91,7 @@ test.describe('Analytics — Profile View event', () => {
 
 test.describe('Analytics — Dossier Download event from profile result', () => {
   test('fires "Dossier Download" when PDF link clicked in profile result', async ({ page }) => {
-    setupSpy(page);
+    await setupSpy(page);
     await stubBase(page);
     await stubProfile(page, PROFILE_FRESH_FIXTURE);
     await page.goto('/');
@@ -118,7 +118,7 @@ test.describe('Analytics — Dossier Download event from profile result', () => 
 
 test.describe('Analytics — Dossier Download event from dossiers list', () => {
   test('fires "Dossier Download" when PDF link clicked in dossiers list', async ({ page }) => {
-    setupSpy(page);
+    await setupSpy(page);
     await stubBase(page);
     await stubDossiers(page);
     await page.goto('/');

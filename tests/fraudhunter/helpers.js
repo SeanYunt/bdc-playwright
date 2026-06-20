@@ -33,8 +33,10 @@ export async function stubDossiers(page, result = DOSSIERS_FIXTURE) {
   await page.route(`${API}/api/dossiers`, r => r.fulfill({ json: result }));
 }
 
-export function setupSpy(page) {
-  return page.addInitScript(() => {
+export async function setupSpy(page) {
+  // Block the real Plausible script so it can't overwrite our spy.
+  await page.route('**/analytics.blackdiamondconsulting.ai/**', r => r.abort());
+  await page.addInitScript(() => {
     window.__plausibleCalls = [];
     window.plausible = (event, options) => {
       window.__plausibleCalls.push({ event, options: options || {} });

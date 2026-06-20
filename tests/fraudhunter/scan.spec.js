@@ -77,7 +77,6 @@ test.describe('Scan tab', () => {
   test('empty state shows message when no results', async ({ page }) => {
     await stubScan(page, { total: 0, providers: [], params: { threshold: 0.5, top: 20, state: 'WY' } });
     await page.locator('#scan-btn').click();
-    await expect(page.locator('#scan-results')).toBeVisible({ timeout: 10000 });
-    await expect(page.locator('#scan-results')).toContainText('0');
+    await expect(page.locator('#scan-results')).toContainText('No providers found above threshold.', { timeout: 10000 });
   });
 });
