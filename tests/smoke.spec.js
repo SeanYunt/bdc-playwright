@@ -14,32 +14,31 @@ test.describe('Smoke — page loads', () => {
   test('nav links are present', async ({ page }) => {
     await page.goto('/');
     const nav = page.locator('.site-nav');
-    await expect(nav.getByRole('link', { name: 'AI Security', exact: true })).toBeVisible();
-    await expect(nav.getByRole('link', { name: 'AI Assistant', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Demo', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'What clients get', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Resources', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'About', exact: true })).toBeVisible();
-    await expect(nav.getByRole('link', { name: 'Free risk assessment', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Become a partner', exact: true })).toBeVisible();
   });
 
   test('mobile nav toggle button exists in DOM', async ({ page }) => {
     await page.goto('/');
-    // nav-toggle is display:none on desktop; verify it's in the DOM for mobile viewports
     await expect(page.locator('.nav-toggle')).toBeAttached();
   });
 
-  test('nav CTA links to /risk-assessment/', async ({ page }) => {
+  test('nav CTA links to /#get-started', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('.nav-cta')).toHaveAttribute('href', '/risk-assessment/');
+    await expect(page.locator('.nav-cta')).toHaveAttribute('href', '/#get-started');
   });
 
-  test('homepage has risk-check section', async ({ page }) => {
+  test('homepage has demo section', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#risk-check')).toBeAttached();
+    await expect(page.locator('#demo')).toBeAttached();
   });
 
-  test('homepage has services section', async ({ page }) => {
+  test('homepage has partner section', async ({ page }) => {
     await page.goto('/');
-    await expect(page.locator('#services')).toBeAttached();
+    await expect(page.locator('#partner')).toBeAttached();
   });
 
   test('homepage has about section', async ({ page }) => {
@@ -47,15 +46,20 @@ test.describe('Smoke — page loads', () => {
     await expect(page.locator('#about')).toBeAttached();
   });
 
+  test('homepage has get-started section', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#get-started')).toBeAttached();
+  });
+
+  test('homepage has how-it-works section', async ({ page }) => {
+    await page.goto('/');
+    await expect(page.locator('#how-it-works')).toBeAttached();
+  });
+
   test('/risk-assessment/ page loads', async ({ page }) => {
     await page.goto('/risk-assessment/');
     await expect(page).toHaveTitle(/Risk Assessment/i);
     await expect(page.locator('h1')).toBeVisible();
-  });
-
-  test('/risk-scan/ redirects to /risk-assessment/', async ({ page }) => {
-    await page.goto('/risk-scan/');
-    await expect(page).toHaveURL(/risk-assessment/);
   });
 
   test('/resources/ page loads', async ({ page }) => {
@@ -66,13 +70,7 @@ test.describe('Smoke — page loads', () => {
 
   test('/ai-assistant/ page loads', async ({ page }) => {
     await page.goto('/ai-assistant/');
-    await expect(page).toHaveTitle(/AI Chat Assistant/i);
     await expect(page.locator('h1')).toBeVisible();
-  });
-
-  test('homepage has ai-assistant-teaser section', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('#ai-assistant-teaser')).toBeAttached();
   });
 
   test('/ai-assistant/ has get-started section', async ({ page }) => {
@@ -88,21 +86,6 @@ test.describe('Smoke — page loads', () => {
   test('footer copyright is visible', async ({ page }) => {
     await page.goto('/');
     await expect(page.locator('.footer-copy')).toContainText('Sean Yunt');
-  });
-
-  test('homepage has who section', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('#who')).toBeAttached();
-  });
-
-  test('homepage has path section', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('#path')).toBeAttached();
-  });
-
-  test('homepage has proof section', async ({ page }) => {
-    await page.goto('/');
-    await expect(page.locator('#proof')).toBeAttached();
   });
 
   test('/thank-you/ page loads with correct heading', async ({ page }) => {

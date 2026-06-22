@@ -9,7 +9,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'html',
   use: {
-    baseURL: process.env.BASE_URL || 'https://blackdiamondconsulting.ai',
+    baseURL: process.env.BASE_URL || (process.env.CI ? 'https://blackdiamondconsulting.ai' : 'http://localhost:1313'),
     trace: 'on-first-retry',
   },
   projects: [

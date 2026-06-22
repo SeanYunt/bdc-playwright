@@ -77,31 +77,6 @@ test.describe('Forms — risk assessment (/risk-assessment/)', () => {
   });
 });
 
-test.describe('Forms — homepage risk check', () => {
-  test.beforeEach(async ({ page }) => {
-    await page.goto('/');
-  });
-
-  test('risk check form is present', async ({ page }) => {
-    await expect(page.locator('#risk-check-form')).toBeAttached();
-  });
-
-  test('risk check has 10 checkboxes', async ({ page }) => {
-    await expect(page.locator('#risk-check-form input[type="checkbox"]')).toHaveCount(10);
-  });
-
-  test('checkboxes are interactive', async ({ page }) => {
-    const cb = page.locator('#risk-check-form input[type="checkbox"]').first();
-    await cb.check();
-    await expect(cb).toBeChecked();
-  });
-
-  test('post-result CTA links to /risk-assessment/', async ({ page }) => {
-    const cta = page.locator('#risk-cta-wrap .btn-primary');
-    await expect(cta).toHaveAttribute('href', '/risk-assessment/');
-  });
-});
-
 test.describe('Forms — AI assistant (/ai-assistant/)', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/ai-assistant/');
@@ -109,25 +84,35 @@ test.describe('Forms — AI assistant (/ai-assistant/)', () => {
 
   test('required fields and submit button are present', async ({ page }) => {
     await expect(page.locator('#ai-name')).toBeVisible();
+    await expect(page.locator('#ai-email')).toBeVisible();
     await expect(page.locator('#ai-business')).toBeVisible();
-    await expect(page.locator('#ai-phone')).toBeVisible();
     await expect(page.locator('#ai-trade')).toBeVisible();
     await expect(page.locator('#ai-assist-submit')).toBeVisible();
   });
 
-  test('optional website field is present', async ({ page }) => {
+  test('optional fields are present', async ({ page }) => {
+    await expect(page.locator('#ai-phone')).toBeVisible();
     await expect(page.locator('#ai-website')).toBeVisible();
   });
 
-  test('name, business, phone, and trade are required', async ({ page }) => {
+  test('name, email, business, and trade are required', async ({ page }) => {
     await expect(page.locator('#ai-name')).toHaveAttribute('required', '');
+    await expect(page.locator('#ai-email')).toHaveAttribute('required', '');
     await expect(page.locator('#ai-business')).toHaveAttribute('required', '');
-    await expect(page.locator('#ai-phone')).toHaveAttribute('required', '');
     await expect(page.locator('#ai-trade')).toHaveAttribute('required', '');
+  });
+
+  test('phone field is optional', async ({ page }) => {
+    const required = await page.locator('#ai-phone').getAttribute('required');
+    expect(required).toBeNull();
   });
 
   test('phone field type is tel', async ({ page }) => {
     await expect(page.locator('#ai-phone')).toHaveAttribute('type', 'tel');
+  });
+
+  test('email field type is email', async ({ page }) => {
+    await expect(page.locator('#ai-email')).toHaveAttribute('type', 'email');
   });
 
   test('website field is not required', async ({ page }) => {
@@ -141,13 +126,13 @@ test.describe('Forms — AI assistant (/ai-assistant/)', () => {
 
   test('form fields are interactive', async ({ page }) => {
     await page.fill('#ai-name', 'Jane Smith');
-    await page.fill('#ai-business', 'Smith Plumbing LLC');
-    await page.fill('#ai-phone', '5550000000');
-    await page.fill('#ai-trade', 'plumbing');
+    await page.fill('#ai-email', 'jane@example.com');
+    await page.fill('#ai-business', 'Mesa Kitchen');
+    await page.fill('#ai-trade', 'restaurant');
     await expect(page.locator('#ai-name')).toHaveValue('Jane Smith');
-    await expect(page.locator('#ai-business')).toHaveValue('Smith Plumbing LLC');
-    await expect(page.locator('#ai-phone')).toHaveValue('5550000000');
-    await expect(page.locator('#ai-trade')).toHaveValue('plumbing');
+    await expect(page.locator('#ai-email')).toHaveValue('jane@example.com');
+    await expect(page.locator('#ai-business')).toHaveValue('Mesa Kitchen');
+    await expect(page.locator('#ai-trade')).toHaveValue('restaurant');
   });
 
   test('submit sends request to formspree', async ({ page }) => {
@@ -155,9 +140,9 @@ test.describe('Forms — AI assistant (/ai-assistant/)', () => {
       page.waitForRequest(req => req.url().includes('formspree.io'), { timeout: 10000 }),
       (async () => {
         await page.fill('#ai-name', 'Jane Smith');
-        await page.fill('#ai-business', 'Smith Plumbing LLC');
-        await page.fill('#ai-phone', '5550000000');
-        await page.fill('#ai-trade', 'plumbing');
+        await page.fill('#ai-email', 'jane@example.com');
+        await page.fill('#ai-business', 'Mesa Kitchen');
+        await page.fill('#ai-trade', 'restaurant');
         await page.click('#ai-assist-submit');
       })(),
     ]);

@@ -7,15 +7,9 @@ test.describe('Navigation — links and buttons', () => {
     await expect(page).toHaveURL('/');
   });
 
-  test('AI Security nav link navigates to homepage', async ({ page }) => {
-    await page.goto('/risk-assessment/');
-    await page.locator('.site-nav').getByRole('link', { name: 'AI Security', exact: true }).click();
-    await expect(page).toHaveURL('/');
-  });
-
-  test('AI Assistant nav link navigates to /ai-assistant/', async ({ page }) => {
+  test('"What clients get" nav link navigates to /ai-assistant/', async ({ page }) => {
     await page.goto('/');
-    await page.locator('.site-nav').getByRole('link', { name: 'AI Assistant', exact: true }).click();
+    await page.locator('.site-nav').getByRole('link', { name: 'What clients get', exact: true }).click();
     await expect(page).toHaveURL('/ai-assistant/');
   });
 
@@ -31,35 +25,22 @@ test.describe('Navigation — links and buttons', () => {
     await expect(page).toHaveURL(/#about/);
   });
 
-  test('Free risk assessment nav CTA navigates to /risk-assessment/', async ({ page }) => {
+  test('"Become a partner" nav CTA scrolls to #get-started', async ({ page }) => {
     await page.goto('/');
     await page.click('.nav-cta');
-    await expect(page).toHaveURL('/risk-assessment/');
+    await expect(page).toHaveURL(/#get-started/);
   });
 
-  test('homepage hero primary CTA scrolls to risk-check section', async ({ page }) => {
+  test('homepage hero primary CTA opens demo site', async ({ page }) => {
     await page.goto('/');
-    await page.locator('a.btn-primary', { hasText: 'Take the 60-second AI risk check' }).first().click();
-    await expect(page).toHaveURL(/#risk-check/);
+    const link = page.locator('a.btn-primary', { hasText: 'Try to break the demo' }).first();
+    await expect(link).toHaveAttribute('href', /demo\.blackdiamondconsulting\.ai/);
   });
 
-  test('homepage hero outline CTA navigates to /risk-assessment/', async ({ page }) => {
+  test('homepage hero outline CTA scrolls to #partner', async ({ page }) => {
     await page.goto('/');
-    await page.locator('a.btn-outline', { hasText: 'Request a free written assessment' }).click();
-    await expect(page).toHaveURL('/risk-assessment/');
-  });
-
-  test('post-risk-check primary CTA navigates to /risk-assessment/', async ({ page }) => {
-    await page.goto('/');
-    // The visible version is the second instance — the first is inside the hidden #risk-cta-wrap
-    await page.locator('a.btn-primary[href="/risk-assessment/"]').nth(1).click();
-    await expect(page).toHaveURL('/risk-assessment/');
-  });
-
-  test('post-risk-check "Take the risk check again" scrolls back to form', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('link', { name: 'Take the risk check again' }).click();
-    await expect(page).toHaveURL(/#risk-check/);
+    await page.locator('a.btn-outline', { hasText: 'See partner pricing' }).click();
+    await expect(page).toHaveURL(/#partner/);
   });
 
   test('risk assessment anchor CTA scrolls to form', async ({ page }) => {
@@ -112,12 +93,6 @@ test.describe('Navigation — links and buttons', () => {
     const link = page.getByRole('link', { name: /example report/i });
     const href = await link.getAttribute('href');
     expect(href).toMatch(/\.pdf/i);
-  });
-
-  test('homepage ai-assistant-teaser CTA navigates to /ai-assistant/', async ({ page }) => {
-    await page.goto('/');
-    await page.locator('a.btn-primary[href="/ai-assistant/"]').click();
-    await expect(page).toHaveURL('/ai-assistant/');
   });
 
   test('/ai-assistant/ hero primary CTA scrolls to get-started section', async ({ page }) => {
